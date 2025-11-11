@@ -6,14 +6,32 @@ This guide gets you from zero to productive quickly. Choose your path based on w
 
 ---
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have:
+
+- **Claude Code CLI** installed ([Installation guide](https://docs.claude.com/en/docs/claude-code/getting-started))
+- **Git** 2.30 or higher
+- **Bash** 4.0+ (Linux/macOS) or **Git Bash** (Windows)
+- **500 MB** of free disk space
+- **Internet connection** for initial installation
+
+To verify your setup:
+```bash
+git --version          # Should show 2.30+
+claude --version       # Should show Claude Code CLI
+```
+
+---
+
 ## ⚡ Quick Start (2 minutes)
 
 ### Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/claude-code-tresor.git
-cd claude-code-tresor
+git clone https://github.com/kholfred-cursor/claude-code-treso.git
+cd claude-code-treso
 
 # Install everything (recommended for first time)
 ./scripts/install.sh
@@ -52,7 +70,7 @@ claude "/scaffold react-component Button"
 
 ```bash
 # 1. Install skills
-./scripts/install.sh --skills
+./scripts/install.sh --skills-only
 
 # 2. Start Claude Code and discuss your code
 # Skills are invoked by Claude when contextually relevant:
@@ -83,7 +101,7 @@ claude "@code-reviewer --focus security"
 
 ```bash
 # 1. Install sub-agents and commands
-./scripts/install.sh --agents-only --commands
+./scripts/install.sh --agents-only --commands-only
 
 # 2. Stage your changes
 git add .
@@ -110,7 +128,7 @@ claude "/review --scope staged --checks all"
 
 ```bash
 # 1. Install commands
-./scripts/install.sh --commands
+./scripts/install.sh --commands-only
 
 # 2. Scaffold components/projects
 claude "/scaffold react-component UserProfile --hooks --tests"
@@ -136,7 +154,7 @@ claude "/scaffold nextjs-app my-app --typescript --tailwind"
 
 ```bash
 # 1. Install test-focused tools
-./scripts/install.sh --skills-only --agents --commands
+./scripts/install.sh --skills-only --agents-only --commands-only
 
 # 2. Start conversation about testing
 # Claude invokes test-generator skill when relevant
@@ -164,7 +182,7 @@ claude "@test-engineer Create comprehensive test suite with edge cases"
 
 ```bash
 # 1. Install documentation tools
-./scripts/install.sh --skills-only --agents
+./scripts/install.sh --skills-only --agents-only
 
 # 2. Discuss documentation with Claude
 # Skills are invoked when discussing docs:
@@ -353,7 +371,7 @@ See [skills/TEMPLATES.md](skills/TEMPLATES.md) for copy-paste templates
 ## 🎓 Learning Path
 
 ### Day 1: Installation & Basics
-- ✅ Install skills (`./scripts/install.sh --skills`)
+- ✅ Install skills (`./scripts/install.sh --skills-only`)
 - ✅ Start Claude Code session and discuss your code
 - ✅ Observe Claude invoking skills during conversations
 - ✅ Request deep analysis: `@code-reviewer Analyze this`
@@ -391,7 +409,7 @@ claude --list-skills
 **Fix:**
 ```bash
 # Reinstall skill
-./scripts/install.sh --skills
+./scripts/install.sh --skills-only
 ```
 
 ### Command Not Found
@@ -403,7 +421,7 @@ ls ~/.claude/commands/ | grep command-name
 
 **Fix:**
 ```bash
-./scripts/install.sh --commands
+./scripts/install.sh --commands-only
 ```
 
 ### Sub-Agent Error
@@ -416,6 +434,40 @@ ls ~/.claude/commands/ | grep command-name
 cat ~/.claude/agents/agent-name.json
 
 # Verify allowed-tools includes required tools
+```
+
+### Windows-Specific Issues
+
+**Issue:** `./scripts/install.sh` not executable
+
+**Fix:**
+```bash
+# Use Git Bash (recommended)
+bash ./scripts/install.sh
+
+# Or use WSL
+wsl bash ./scripts/install.sh
+```
+
+**Issue:** Permission denied on `~/.claude`
+
+**Fix (PowerShell as Administrator):**
+```powershell
+# Create directory if missing
+New-Item -Path "$env:USERPROFILE\.claude" -ItemType Directory -Force
+
+# Set permissions
+icacls "$env:USERPROFILE\.claude" /grant "$env:USERNAME:(OI)(CI)F"
+```
+
+**Issue:** Path not found `~/.claude`
+
+**Fix:**
+```bash
+# Windows uses different home directory
+# In Git Bash: ~/.claude maps to C:\Users\YourName\.claude
+ls "$USERPROFILE/.claude"  # PowerShell
+ls ~/.claude               # Git Bash
 ```
 
 ---
